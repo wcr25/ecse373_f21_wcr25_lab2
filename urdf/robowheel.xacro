@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="navvis">
+
+	<link     name = "base">
+		<visual>
+			<!--   Shift   the   box   up   half   its   height.   !-->
+			<origin     xyz = "0.0 0.0 0.96"     rpy = "0.0 0.0 0.0" />
+			<geometry>
+				<box     size = "0.45 0.78 1.92"    />
+			</geometry>
+		</visual>
+		<collision>
+			<!--   Shift   the   box   up   half   its   height.   !-->
+			<origin     xyz = "0.0 0.0 0.96"     rpy = "0.0 0.0 0.0"    />
+			<geometry>
+				<box     size = "0.45 0.78 1.92"    />
+			</geometry>
+		</collision>
+	</link>
+	
+	<link     name = "laser_vert_bottom_joint">
+		<visual>
+			<!--   Shift   the   box   up   half   its   height.   !-->
+			<origin     xyz = "0.0 0.0 0.96"     rpy = "0.0 0.0 0.0"    />
+			<geometry>
+				<box     size = "0.062 0.062 0.087"    />
+			</geometry>
+		</visual>
+		<collision>
+			<!--   Shift   the   box   up   half   its   height.   !-->
+			<origin     xyz = "0.0 0.0 0.96"     rpy = "0.0 0.0 0.0"    />
+			<geometry>
+				<box     size = "0.062 0.062 0.087"    />
+			</geometry>
+		</collision>
+	</link>
+
+	<xacro:macro name="wheel" params="side reflect">
+		<link name = "${side}_wheel">
+			<visual>
+			<!--   Shift   the   box   up   half   its   height.   !-->
+				<origin     xyz = "0.0 0.0 0.96"     rpy = "0.0 0.0 0.0"    />
+				<geometry>
+					<cylinder length = "0.05" radius="0.2" />
+				</geometry>
+			</visual>
+			<collision>
+			<!--   Shift   the   box   up   half   its   height.   !-->
+				<origin     xyz = "0.0 0.0 0.96"     rpy = "0.0 0.0 0.0"    />
+				<geometry>
+					<cylinder length = "0.05" radius="0.2" />
+				</geometry>
+			</collision>
+		</link>
+
+		<joint name="base_to_wheel" type="continuous">
+			<parent link="base_link" />
+			<child link="${side}_wheel" />
+			<origin xyz="0 ${reflect*0.062} 0.96" />
+		</joint>
+	</xacro:macro>
+
+	<xacro:macro name="center_wheel">
+		<link name="center_wheel">
+			<visual>
+				<origin xyz="0.0 0.0 0.96" rpy="0.0 0.0 0.0"/>
+				<geometry>
+					<cylinder radius="0.2" length="0.05"/>
+				</geometry>>
+			</visual>
+			<collision>
+				<origin xyz="0.0 0.0 0.96" rpy="0.0 0.0 0.0"/>
+				<geometry>
+					<cylinder radius="0.2" length="0.05"/>
+				</geometry>>
+			</collision>
+		</link>
+		<joint name="base_to_center" type="continuous">
+			<origin xyz="0.62 0.0 0.0" rpy="0.0 0.0 0.0"/>
+			<parent link="base"/>
+			<child link="center_wheel"/>
+		</joint>
+	</xacro:macro>
+
+	<joint name = "base_laser_vert_bottom_joint" type = "fixed" >
+		<parent     link = "base" />
+		<child     link = "laser_vert_bottom_joint" />
+		<origin     xyz = "0.3158 -0.0021 0.5100"     rpy = "3.1355 -1.3045 0.0025" />
+	</joint>
+
+
+	<xacro:wheel side="left" reflect="1" />
+	<xacro:wheel side="right" reflect="-1" />
+	<xacro:center_wheel />
+
+</robot>
